@@ -1,0 +1,24 @@
+$progressBarColour: #F2F2F2;
+$progressValueColour: rgb(28, 192, 184);
+
+
+.Progress-main {
+    background-color: red;
+    width: 80%;
+    height: 0.7em;
+    margin-top: 0.75em;
+}
+.Progress-main::-moz-progress-bar { 
+    background: $progressValueColour;
+}
+.Progress-main::-webkit-progress-bar {
+    background: $progressBarColour;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) inset;
+}
+.Progress-main::-webkit-progress-value {
+    background: $progressValueColour;
+}
+.Progress-main::-ms-fill { 
+    background: $progressValueColour;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) inset;
+}

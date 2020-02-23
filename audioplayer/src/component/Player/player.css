@@ -1,0 +1,8 @@
+.player {
+    height: 150px;
+    width: 40%;
+    background-image: linear-gradient(to right, #acbae8, #5aedc8);
+    border-radius: 5%;
+    margin: 2% auto;
+    padding-top: 2%;
+}
