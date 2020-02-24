@@ -77,10 +77,11 @@ const Player = props => {
 
     //Progress bar clicked handler
     const progressBarClickedHandler = (event) => {
-    //     let percent = event.offsetX / this.offsetWidth;
-    //     player.currentTime = percent * player.duration;
-    //     const value = percent / 100;
-    //     setProgressValue(value);
+        let percent = event.screenX / event.currentTarget.offsetWidth;
+        //event.offsetX / this.offsetWidth;
+        player.currentTime = percent * player.duration;
+        const value = percent / 100;
+        setProgressValue(value);
     }
 
 
