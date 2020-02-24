@@ -87,10 +87,10 @@ const Player = props => {
 
     return (
         <div className="player">
-            <div style={{ float: "left", paddingLeft: "40px" }}>
+            <div style={{ float: "left", paddingLeft: "20px" }}>
                 <span id="timeElapsed">{timeSpanValue}</span>
             </div>
-            <div style={{ float: "right", paddingRight: "40px" }}>
+            <div style={{ float: "right", paddingRight: "20px" }}>
                 <span id="percentage">{percentage}</span>
             </div>
             <br></br>
