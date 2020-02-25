@@ -2,8 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import './player.css';
 import Button from '../UI/Button/Button';
-import PauseButtonImage from '../../assets/images/pause-button.png';
-import PlayButtonImage from '../../assets/images/play-button.png';
+import ImageButton from '../UI/Button/ImageButton';
+
+import StopButtonImage from '../../assets/images/stop.png';
+import VolumnButtonImage from '../../assets/images/volumn.png';
+import VolumnPlusButtonImage from '../../assets/images/plus.png';
+import VolumnMinusButtonImage from '../../assets/images/minus.png';
+
 import ProgressBar from '../UI/Progressbar/Progressbar';
 
 const Player = props => {
@@ -11,7 +16,7 @@ const Player = props => {
     const [track, setTrack] = useState(null);
     const [player, setPlayer] = useState(null);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [playButtonImageId, setPlayButtonImageId] = useState(null);
+    // const [playButtonImageId, setPlayButtonImageId] = useState(null);
     const [timeSpanValue, setTimeSpanValue] = useState("00:00/00:00");
     const [percentage, setPercentage] = useState("0%");
     const [progressValue, setProgressValue] = useState(0);
@@ -20,7 +25,7 @@ const Player = props => {
     const Init = () => {
         setTrack(props.song);
         setPlayer(document.getElementById('player'));
-        setPlayButtonImageId(document.getElementById('imgPlay'));
+        // setPlayButtonImageId(document.getElementById('imgPlay'));
     };
 
     useEffect(() => {
@@ -60,30 +65,63 @@ const Player = props => {
             player.pause();
             setIsPlaying(false);
         }
-        togglePlay();
     };
 
     //Toggle button image play => pause.
-    const togglePlay = () => {
-        if (playButtonImageId !== null && isPlaying === false) {
-            playButtonImageId.src = PauseButtonImage;
-            playButtonImageId.alt = "Pause";
-        }
-        else {
-            playButtonImageId.src = PlayButtonImage;
-            playButtonImageId.alt = "Play";
-        }
-    }
+    // const togglePlay = () => {
+    //playButtonImageId.toggleClass("paused");
+    // if (playButtonImageId !== null && isPlaying === false) {
+    //     playButtonImageId.src = PauseButtonImage;
+    //     playButtonImageId.alt = "Pause";
+    // }
+    // else {
+    //     playButtonImageId.src = PlayButtonImage;
+    //     playButtonImageId.alt = "Play";
+    // }
+    // }
 
     //Progress bar clicked handler
     const progressBarClickedHandler = (event) => {
-        let percent = event.screenX / event.currentTarget.offsetWidth;
-        //event.offsetX / this.offsetWidth;
-        player.currentTime = percent * player.duration;
-        const value = percent / 100;
-        setProgressValue(value);
+        console.log(event);
     }
 
+    //Stop button click handler.
+    const stopButtonClickedEventHandler = (event) => {
+        event.preventDefault();
+
+        if (isPlaying === true) {
+            player.pause();
+            player.currentTime = 0;
+            setIsPlaying(false);
+            setProgressValue(0);
+            setTimeSpanValue("00:00/00:00");
+            setPercentage("0%");
+        }
+    }
+
+    const volumnPlusButtonClickedEventHandler = (event) => {
+        event.preventDefault();
+
+        if (isPlaying === true) {
+            let volume = player.volume;
+
+            if (volume < 1) {
+                player.volume = (volume + 0.1) > 1 ? 1 : volume + 0.1;
+            }
+        }
+    }
+
+    const volumnMinusButtonClickedEventHandler = (event) => {
+        event.preventDefault();
+
+        if (isPlaying === true) {
+            let volume = player.volume;
+            
+            if (player.volume > 0) {
+                player.volume = (volume - 0.1) < 0 ? 0 : volume - 0.1;
+            }
+        }
+    }
 
     return (
         <div className="player">
@@ -94,13 +132,37 @@ const Player = props => {
                 <span id="percentage">{percentage}</span>
             </div>
             <br></br>
-            <Button
-                buttonImage={PlayButtonImage}
-                id="btnPlay"
-                imageId="imgPlay"
-                alt="Play"
-                clicked={playButtonClickedEventHandler}>
-            </Button>
+            <div className="buttonDiv">
+                <Button
+                    class={isPlaying ? 'button paused' : 'button'}
+                    id="btnPlay"
+                    alt="Play"
+                    clicked={playButtonClickedEventHandler}>
+                </Button>
+                <ImageButton
+                    buttonImage={StopButtonImage}
+                    id="btnStop"
+                    atl="Stop"
+                    clicked={stopButtonClickedEventHandler}>
+                </ImageButton>
+                <ImageButton
+                    buttonImage={VolumnButtonImage}
+                    id="btnVolumn"
+                    atl="Volumn">
+                </ImageButton>
+                <ImageButton
+                    buttonImage={VolumnPlusButtonImage}
+                    id="btnVolumn"
+                    atl="Volumn"
+                    clicked={volumnPlusButtonClickedEventHandler}>
+                </ImageButton>
+                <ImageButton
+                    buttonImage={VolumnMinusButtonImage}
+                    id="btnVolumn"
+                    atl="Volumn"
+                    clicked={volumnMinusButtonClickedEventHandler}>
+                </ImageButton>
+            </div>
             <br></br>
             <ProgressBar value={progressValue} clicked={progressBarClickedHandler}></ProgressBar>
             <br></br>

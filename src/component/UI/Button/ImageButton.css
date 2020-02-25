@@ -1,0 +1,9 @@
+.imagebutton {
+     border: 0;
+     background: transparent;
+ }
+    
+.imagebutton:hover{
+     outline: none;
+ }
+    
