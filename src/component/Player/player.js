@@ -128,17 +128,17 @@ const Player = props => {
         //Get width element
         var progressbarWidth = event.currentTarget.offsetWidth;
         //Ger Position cursor
-        var sursorPosition = event.pageX - event.currentTarget.offsetLeft;
+        var cursorPosition = event.pageX - event.currentTarget.offsetLeft;
 
         // Round %
-        var percentage = Math.round(sursorPosition / progressbarWidth * 100);
+        var percentage = Math.round(cursorPosition / progressbarWidth * 100);
 
         if (percentage > 100) {
             percentage = 100;
         }
 
         //Set player current time.
-        player.currentTime = (sursorPosition / progressbarWidth) * player.duration;
+        player.currentTime = Math.floor((cursorPosition / progressbarWidth) * player.duration);
 
         //Set progress bar value.
         progress.value = percentage;
