@@ -1,30 +1,30 @@
 .player {
-    height: 100px;
-    width: 200px;
+    height: 125px;
+    width: 300px;
     background-image: linear-gradient(to right, #acbae8, #5aedc8);
-    border-radius: 5%;
+    border-radius: 3%;
     margin: 2% auto;
     padding-top: 2%;
 }
 
 @media (min-width: 500px) and (min-height: 400px) {
     .player {
-        width: 350px;
-        height: 250px;
+        width: 300px;
+        height: 125px;
     }
 }
 
 @media (min-width: 500px) and (min-height: 401px) {
     .player {
-        width: 350px;
-        height: 250px;
+        width: 300px;
+        height: 125px;
     }
 }
 
 @media (min-width: 1000px) and (min-height: 700px) {
     .player {
-        width: 500px;
-        height: 300px;
+        width: 300px;
+        height: 125px;
     }
 }
 

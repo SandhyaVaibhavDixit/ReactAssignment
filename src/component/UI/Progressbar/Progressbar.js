@@ -1,14 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './Progressbar.scss';
 
-const ProgressBar = (props) => {
-    const [progress, setProgress] = useState(null);
-
-    useEffect(() =>{
-        setProgress(document.getElementById('seekProgress'));
-    },[]);
-
-    return (
+const progressBar = (props) => (
         <div>
             <progress
                 className='Progress-main'
@@ -16,11 +9,9 @@ const ProgressBar = (props) => {
                 max="100"
                 id="seekProgress"
                 value={props.value}
-                // onClick={props.clicked}
-                onClickCapture={props.clicked}>
+                onClick={props.clicked}>
             </progress>
         </div>
-    )
-};
+);
 
-export default ProgressBar;
+export default progressBar;

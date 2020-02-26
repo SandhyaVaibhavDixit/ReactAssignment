@@ -3,20 +3,25 @@ $progressValueColour: rgb(28, 192, 184);
 
 
 .Progress-main {
-    background-color: red;
+    background-color: none;
     width: 80%;
-    height: 0.7em;
+    height: 0.9 em;
     margin-top: 0.75em;
+    border: none;
+    border-radius:50px;
 }
 .Progress-main::-moz-progress-bar { 
     background: $progressValueColour;
+    border-radius:100px;
 }
 .Progress-main::-webkit-progress-bar {
     background: $progressBarColour;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) inset;
+    border-radius:100px;
 }
 .Progress-main::-webkit-progress-value {
     background: $progressValueColour;
+    border-radius:100px;
 }
 .Progress-main::-ms-fill { 
     background: $progressValueColour;
