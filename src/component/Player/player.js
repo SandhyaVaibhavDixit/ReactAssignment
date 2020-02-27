@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
 
 import './player.css';
 
@@ -13,26 +13,33 @@ import VolumnMinusButtonImage from '../../assets/images/minus.png';
 import MuteButtonImage from '../../assets/images/mute.png';
 
 const Player = props => {
+    let player= useRef();
 
-    const [track, setTrack] = useState(null);
-    const [player, setPlayer] = useState(null);
-    const [isPlaying, setIsPlaying] = useState(false);
-    // const [playButtonImageId, setPlayButtonImageId] = useState(null);
-    const [timeSpanValue, setTimeSpanValue] = useState("00:00 \\ 00:00");
-    const [percentage, setPercentage] = useState("0%");
-    const [progressValue, setProgressValue] = useState(0);
-    const [mute, setMute] = useState(false);
-
-    //Initializa all constants.
-    const Init = () => {
-        setTrack(props.song);
-        setPlayer(document.getElementById('player'));
-        // setPlayButtonImageId(document.getElementById('imgPlay'));
+    //Declare initial state.
+    const initialState = {
+        isPlaying: false,
+        timeSpanValue: "00:00 \\ 00:00",
+        percentage: "0%",
+        progressValue: 0,
+        mute: false
     };
 
-    useEffect(() => {
-        Init()
-    }, [Init]);
+    const [state, setState] = useState(initialState);
+    const updateState = data => setState(prevState => ({ ...prevState, ...data }));
+
+
+    //const [player, setPlayer] = useState(null);
+
+    //Initializa all constants.
+
+    const { song } = props;
+
+    // useEffect(() => {
+    //     const Init = () => {
+    //         setPlayer(document.getElementById('player'));
+    //     };
+    //     Init();
+    // }, [initialState]);
 
     //Format time from seconds => mm:ss
     const formatTime = (currentTimeInSeconds) => {
@@ -49,27 +56,26 @@ const Player = props => {
     //Play button event handler.
     const playButtonClickedEventHandler = (event) => {
         event.preventDefault();
-
-        if (isPlaying === false) {
+        if (state.isPlaying === false) {
             player.play();
-            setIsPlaying(true);
+            updateState({ isPlaying: true });
             player.addEventListener('timeupdate', (event) => {
-                const currentTime = Math.floor(player.currentTime);
-                const duration = Math.floor(player.duration);
-                setTimeSpanValue(formatTime(currentTime) + " / " + formatTime(duration));
+                const currentTime = Math.floor(event.target.currentTime);
+                const duration = Math.floor(event.target.duration);
+                updateState({ timeSpanValue: formatTime(currentTime) + " / " + formatTime(duration) });
 
-                if(currentTime === duration){
-                    setIsPlaying(false);
+                if (currentTime === duration) {
+                    updateState({ isPlaying: false });
                 }
 
                 const percentage = ((currentTime * 100) / duration).toFixed(2);
-                setPercentage(percentage + "%");
-                setProgressValue(percentage);
+                updateState({ percentage: percentage + "%" });
+                updateState({ progressValue: percentage });
             }, false)
         }
         else {
             player.pause();
-            setIsPlaying(false);
+            updateState({ isPlaying: false });
         }
     };
 
@@ -77,13 +83,10 @@ const Player = props => {
     const stopButtonClickedEventHandler = (event) => {
         event.preventDefault();
 
-        if (isPlaying === true) {
+        if (state.isPlaying === true) {
             player.pause();
             player.currentTime = 0;
-            setIsPlaying(false);
-            setProgressValue(0);
-            setTimeSpanValue("00:00 \\ 00:00");
-            setPercentage("0%");
+            updateState(initialState);
         }
     }
 
@@ -91,7 +94,7 @@ const Player = props => {
     const volumnPlusButtonClickedEventHandler = (event) => {
         event.preventDefault();
 
-        if (isPlaying === true) {
+        if (state.isPlaying === true) {
             let volume = player.volume;
 
             if (volume < 1) {
@@ -99,7 +102,7 @@ const Player = props => {
             }
 
             if (volume > 0) {
-                setMute(false);
+                updateState({ mute: false });
             }
         }
     }
@@ -108,14 +111,14 @@ const Player = props => {
     const volumnMinusButtonClickedEventHandler = (event) => {
         event.preventDefault();
 
-        if (isPlaying === true) {
+        if (state.isPlaying === true) {
             let volume = player.volume;
 
             if (player.volume > 0) {
                 player.volume = (volume - 0.1) < 0 ? 0 : volume - 0.1;
             }
             else if (player.volume === 0) {
-                setMute(true);
+                updateState({ mute: true });
             }
         }
     }
@@ -127,6 +130,7 @@ const Player = props => {
 
         //Get width element
         var progressbarWidth = event.currentTarget.offsetWidth;
+
         //Ger Position cursor
         var cursorPosition = event.pageX - event.currentTarget.offsetLeft;
 
@@ -147,15 +151,15 @@ const Player = props => {
     return (
         <div className="player">
             <div style={{ float: "left", paddingLeft: "25px" }}>
-                <span style={{fontWeight: "bold"}} id="timeElapsed">{timeSpanValue}</span>
+                <span style={{ fontWeight: "bold" }} id="timeElapsed">{state.timeSpanValue}</span>
             </div>
             <div style={{ float: "right", paddingRight: "25px" }}>
-                <span style={{fontWeight: "bold"}} id="percentage">{percentage}</span>
+                <span style={{ fontWeight: "bold" }} id="percentage">{state.percentage}</span>
             </div>
             <br></br>
             <div className="buttonDiv">
                 <Button
-                    class={isPlaying ? 'button paused' : 'button'}
+                    class={state.isPlaying ? 'button paused' : 'button'}
                     id="btnPlay"
                     alt="Play"
                     clicked={playButtonClickedEventHandler}>
@@ -167,7 +171,7 @@ const Player = props => {
                     clicked={stopButtonClickedEventHandler}>
                 </ImageButton>
                 <ImageButton
-                    buttonImage={mute ? MuteButtonImage : VolumnButtonImage}
+                    buttonImage={state.mute ? MuteButtonImage : VolumnButtonImage}
                     id="btnVolumn"
                     atl="Volumn">
                 </ImageButton>
@@ -184,9 +188,9 @@ const Player = props => {
                     clicked={volumnMinusButtonClickedEventHandler}>
                 </ImageButton>
             </div>
-            <ProgressBar value={progressValue} clicked={progressBarClickHandler}></ProgressBar>
+            <ProgressBar value={state.progressValue} clicked={progressBarClickHandler}></ProgressBar>
             <br></br>
-            <audio preload="none" id="player" src={track}>
+            <audio ref={ref =>(player = ref)} preload="none" id="player" src={song}>
             </audio>
         </div>
     );
